@@ -1,4 +1,4 @@
-package test;
+package test2;
 import backtype.storm.Config;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
@@ -8,6 +8,7 @@ import backtype.storm.spout.SchemeAsMultiScheme;
 import backtype.storm.topology.TopologyBuilder;
 import storm.kafka.*;
 import storm.kafka.bolt.KafkaBolt;
+import test.TestBolt;
 
 import java.util.Properties;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
  * @date Nov 16, 2015 3:09:40 PM
  * @todo TODO
  */
-public class LogProcess {
+public class LogProcess2 {
   public static void main(String[] args) throws InvalidTopologyException,
       AuthorizationException, AlreadyAliveException {
     TopologyBuilder builder = new TopologyBuilder();
@@ -30,7 +31,7 @@ public class LogProcess {
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
 
     builder.setSpout("spout1", new KafkaSpout(spoutConfig),1);
-    builder.setBolt("bolt1", new TestBolt(), 1)
+    builder.setBolt("bolt1", new TestBolt2(), 1)
         .shuffleGrouping("spout1");
 
     Config config = new Config();
@@ -41,6 +42,6 @@ public class LogProcess {
     props.put("serializer.class", "kafka.serializer.StringEncoder");
     config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
     config.setNumWorkers(1);
-    StormSubmitter.submitTopology("testack", config, builder.createTopology());
+    StormSubmitter.submitTopology("testack2", config, builder.createTopology());
   }
 }
