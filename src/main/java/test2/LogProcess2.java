@@ -1,5 +1,6 @@
 package test2;
 import backtype.storm.Config;
+import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.AuthorizationException;
@@ -29,6 +30,7 @@ public class LogProcess2 {
     String id = UUID.randomUUID().toString();
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkRoot, id);
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
+    spoutConfig.startOffsetTime=kafka.api.OffsetRequest.LatestTime();
 
     builder.setSpout("spout1", new KafkaSpout(spoutConfig),1);
     builder.setBolt("bolt1", new TestBolt2(), 1)
@@ -43,5 +45,8 @@ public class LogProcess2 {
     config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
     config.setNumWorkers(1);
     StormSubmitter.submitTopology("testack2", config, builder.createTopology());
+//    LocalCluster cluster = new LocalCluster();
+//    cluster.submitTopology("testack3", config, builder.createTopology());
+    
   }
 }
