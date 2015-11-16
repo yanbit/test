@@ -25,15 +25,21 @@ public class TestBolt extends BaseRichBolt {
 
   @Override
   public void execute(Tuple input) {
+    String line = null;
     try {
-      String line = input.getString(0);
-      System.out.println("===================line:"+line);
+      line = input.getString(0);
+      if (line.contains("Error")) {
+        throw new RuntimeException();
+      }
+      System.out.println("===================line:" + line);
+
       collector.ack(input);
     } catch (Exception e) {
+      System.out.println("===================Error line:" + line);
       collector.fail(input);
       e.printStackTrace();
     }
-    
+
   }
 
   @Override

@@ -22,14 +22,14 @@ public class LogProcess {
     TopologyBuilder builder = new TopologyBuilder();
     BrokerHosts hosts =
         new ZkHosts("datanode1:2181,datanode2:2181,datanode4:2181");
-    String topic = "test_upusers_2";
-    String zkRoot = "/test_upusers_2";
+    String topic = "testack";
+    String zkRoot = "/testack";
     String id = UUID.randomUUID().toString();
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkRoot, id);
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
 
     builder.setSpout("spout1", new KafkaSpout(spoutConfig));
-    builder.setBolt("bolt1", new LogFilterBolt(), 1).setNumTasks(1)
+    builder.setBolt("bolt1", new TestBolt(), 1)
         .shuffleGrouping("spout1");
 
     Config config = new Config();
@@ -40,6 +40,6 @@ public class LogProcess {
     props.put("serializer.class", "kafka.serializer.StringEncoder");
     config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
     config.setNumWorkers(3);
-    StormSubmitter.submitTopology("testlog", config, builder.createTopology());
+    StormSubmitter.submitTopology("testack", config, builder.createTopology());
   }
 }
