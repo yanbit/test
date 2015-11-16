@@ -44,7 +44,7 @@ public class TestBolt2 implements IBasicBolt {
     } catch (Exception e) {
       System.out.println("===================Error line:" + line);
       //collector.fail(input);
-      collector.reportError(e);
+      //collector.reportError(e);
       e.printStackTrace();
     }
   }
