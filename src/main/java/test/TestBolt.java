@@ -37,8 +37,6 @@ public class TestBolt extends BaseRichBolt {
     } catch (Exception e) {
       System.out.println("===================Error line:" + line);
       collector.fail(input);
-      collector.
-      e.printStackTrace();
     }
 
   }
