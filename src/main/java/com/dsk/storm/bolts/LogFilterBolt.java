@@ -34,10 +34,10 @@ public class LogFilterBolt extends BaseRichBolt {
   public void execute(Tuple tuple) {
     try {
       String line = tuple.getString(0);
-      System.out.println(line);
+      System.out.println("+++++++++++++++line+++++++++++++++"+line);
       String[] items = line.split(",");
       if (items.length != 10) {
-        System.out.println(line);
+        System.out.println("+++++++++++++++line Error+++++++++++++++"+line);
         return;
       }
 
