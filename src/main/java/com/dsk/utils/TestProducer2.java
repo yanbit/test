@@ -58,7 +58,7 @@ public class TestProducer2 {
             new KeyedMessage<String, String>(TOPIC, nline);
         producer.send(message);
         // System.out.println(nline);
-        System.out.println(nline);
+        //System.out.println(nline);
       }
     }
   }
