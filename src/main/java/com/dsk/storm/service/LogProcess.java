@@ -41,7 +41,7 @@ public class LogProcess {
         config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
         config.setMaxSpoutPending(10000);
         config.setMessageTimeoutSecs(60);
-        config.setNumWorkers(3);
+        config.setNumWorkers(6);
         
         //LocalCluster cluster = new LocalCluster();
         //cluster.submitTopology("testwhxyk", config, builder.createTopology());
