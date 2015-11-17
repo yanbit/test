@@ -39,6 +39,7 @@ public class TestBolt2 implements IBasicBolt {
       if (line.contains("Error")) {
         throw new RuntimeException();
       }
+      Thread.sleep(1000);
       System.out.println("===================line:" + line);
       //collector.ack(input);
     } catch (Exception e) {

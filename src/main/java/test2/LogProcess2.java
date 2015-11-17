@@ -25,8 +25,8 @@ public class LogProcess2 {
     //TransactionalTopologyBuilder
     BrokerHosts hosts =
         new ZkHosts("datanode1:2181,datanode2:2181,datanode4:2181");
-    String topic = "testack";
-    String zkRoot = "/testack";
+    String topic = "test_whx_1";
+    String zkRoot = "/test_whx_1";
     String id = UUID.randomUUID().toString();
     SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkRoot, id);
     spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
