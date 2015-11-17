@@ -29,8 +29,8 @@ public class LogProcess {
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         spoutConfig.startOffsetTime = kafka.api.OffsetRequest.LatestTime();
 
-        builder.setSpout("spout1", new KafkaSpout(spoutConfig), 2);
-        builder.setBolt("bolt1", new LogFilterBolt(), 5).shuffleGrouping("spout1");
+        builder.setSpout("spout1", new KafkaSpout(spoutConfig), 3);
+        builder.setBolt("bolt1", new LogFilterBolt(), 10).shuffleGrouping("spout1");
 
         Config config = new Config();
         Properties props = new Properties();
@@ -38,7 +38,7 @@ public class LogProcess {
         props.put("request.required.acks", "1");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
-        config.setNumWorkers(2);
+        config.setNumWorkers(3);
         StormSubmitter.submitTopology("testwhxyk", config, builder.createTopology());
     }
 }
