@@ -7,6 +7,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 import com.dsk.kudu.KudoManager;
 import com.dsk.utils.Constants;
+import com.dsk.utils.DBPool;
 import com.dsk.utils.StringOperator;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
@@ -21,22 +22,21 @@ import java.util.Map;
  */
 public class LogFilterBolt extends BaseRichBolt {
   private OutputCollector collector;
-  Connection conn;
+
   @Override
   public void prepare(Map map, TopologyContext topologyContext,
       OutputCollector outputCollector) {
     this.collector = outputCollector;
-    conn = KudoManager.getInstance().getConnection();
   }
 
   @Override
   public void execute(Tuple tuple) {
     try {
       String line = tuple.getString(0);
-      System.out.println("+++++++++++++++line+++++++++++++++"+line);
+      System.out.println("+++++++++++++++line+++++++++++++++" + line);
       String[] items = line.split(",");
       if (items.length != 10) {
-        System.out.println("+++++++++++++++line Error+++++++++++++++"+line);
+        System.out.println("+++++++++++++++line Error+++++++++++++++" + line);
         return;
       }
 
@@ -51,7 +51,8 @@ public class LogFilterBolt extends BaseRichBolt {
           .append(" VALUES (\"").append(mid).append("\",\"").append(attrs)
           .append("\");");
       String insert_sql = sb.toString();
-      //Connection conn = KudoManager.getInstance().getConnection();
+      Connection conn = DBPool.getInstance().getConnection();
+      System.out.println("+++++++++++++conn+++++++++++++++"+conn);
       insert(conn, insert_sql, mid, items);
 
       this.collector.ack(tuple);
@@ -66,13 +67,6 @@ public class LogFilterBolt extends BaseRichBolt {
 
   @Override
   public void cleanup() {
-    try {
-    if (conn != null) {
-    conn.close();
-    }
-    } catch (Exception e) {
-    e.printStackTrace();
-    }
   }
 
   @Override
@@ -99,13 +93,13 @@ public class LogFilterBolt extends BaseRichBolt {
         }
       }
     } finally {
-//       try {
-//       if (conn != null) {
-//       conn.close();
-//       }
-//       } catch (Exception e) {
-//       e.printStackTrace();
-//       }
+       try {
+       if (conn != null) {
+       conn.close();
+       }
+       } catch (Exception e) {
+       e.printStackTrace();
+       }
     }
 
   }
