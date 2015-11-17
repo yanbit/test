@@ -28,7 +28,7 @@ public class LogProcess {
         String id = UUID.randomUUID().toString();
         SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkRoot, id);
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
-        //spoutConfig.startOffsetTime = kafka.api.OffsetRequest.LatestTime();
+        spoutConfig.startOffsetTime = kafka.api.OffsetRequest.LatestTime();
 
         builder.setSpout("spout1", new KafkaSpout(spoutConfig), 3);
         builder.setBolt("bolt1", new LogFilterBolt(), 15).shuffleGrouping("spout1");
