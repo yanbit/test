@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by wanghaixing on 2015/11/12.
@@ -54,10 +55,11 @@ public class LogFilterBolt extends BaseRichBolt {
           .append("\");");
       String insert_sql = sb.toString();
       Connection conn =null;
-      if (tuple.getSourceTask() % 3 == 0) {
+      int num = new Random().nextInt(10)%3;
+      if ( num == 0) {
         conn = DBPool3.getInstance().getConnection();
         System.out.println("+++++++++++++conn333+++++++++++++++" + conn);
-      } else if (tuple.getSourceTask() % 3 == 1) {
+      } else if (num == 1) {
         conn = DBPool2.getInstance().getConnection();
         System.out.println("+++++++++++++conn222+++++++++++++++" + conn);
       } else {
