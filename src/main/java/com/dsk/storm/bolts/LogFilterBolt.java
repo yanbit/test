@@ -21,8 +21,7 @@ import java.util.Map;
  */
 public class LogFilterBolt extends BaseRichBolt {
   private OutputCollector collector;
-  private Connection conn;
-
+  Connection conn;
   @Override
   public void prepare(Map map, TopologyContext topologyContext,
       OutputCollector outputCollector) {
@@ -52,7 +51,7 @@ public class LogFilterBolt extends BaseRichBolt {
           .append(" VALUES (\"").append(mid).append("\",\"").append(attrs)
           .append("\");");
       String insert_sql = sb.toString();
-      // Connection conn = KudoManager.getInstance().getConnection();
+      //Connection conn = KudoManager.getInstance().getConnection();
       insert(conn, insert_sql, mid, items);
 
       this.collector.ack(tuple);
@@ -68,11 +67,11 @@ public class LogFilterBolt extends BaseRichBolt {
   @Override
   public void cleanup() {
     try {
-      if (conn != null) {
-        conn.close();
-      }
+    if (conn != null) {
+    conn.close();
+    }
     } catch (Exception e) {
-      e.printStackTrace();
+    e.printStackTrace();
     }
   }
 
@@ -100,13 +99,13 @@ public class LogFilterBolt extends BaseRichBolt {
         }
       }
     } finally {
-      // try {
-      // if (conn != null) {
-      // conn.close();
-      // }
-      // } catch (Exception e) {
-      // e.printStackTrace();
-      // }
+//       try {
+//       if (conn != null) {
+//       conn.close();
+//       }
+//       } catch (Exception e) {
+//       e.printStackTrace();
+//       }
     }
 
   }
