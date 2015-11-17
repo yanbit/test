@@ -8,6 +8,8 @@ import backtype.storm.tuple.Tuple;
 import com.dsk.kudu.KudoManager;
 import com.dsk.utils.Constants;
 import com.dsk.utils.DBPool;
+import com.dsk.utils.DBPool2;
+import com.dsk.utils.DBPool3;
 import com.dsk.utils.StringOperator;
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
@@ -51,8 +53,19 @@ public class LogFilterBolt extends BaseRichBolt {
           .append(" VALUES (\"").append(mid).append("\",\"").append(attrs)
           .append("\");");
       String insert_sql = sb.toString();
-      Connection conn = DBPool.getInstance().getConnection();
-      System.out.println("+++++++++++++conn+++++++++++++++"+conn);
+      Connection conn =null;
+      if (tuple.getSourceTask() % 3 == 0) {
+        conn = DBPool3.getInstance().getConnection();
+        System.out.println("+++++++++++++conn333+++++++++++++++" + conn);
+      } else if (tuple.getSourceTask() % 3 == 1) {
+        conn = DBPool2.getInstance().getConnection();
+        System.out.println("+++++++++++++conn222+++++++++++++++" + conn);
+      } else {
+        conn = DBPool.getInstance().getConnection();
+        System.out.println("+++++++++++++conn000+++++++++++++++" + conn);
+      }
+      
+      
       insert(conn, insert_sql, mid, items);
 
       this.collector.ack(tuple);
@@ -93,13 +106,13 @@ public class LogFilterBolt extends BaseRichBolt {
         }
       }
     } finally {
-       try {
-       if (conn != null) {
-       conn.close();
-       }
-       } catch (Exception e) {
-       e.printStackTrace();
-       }
+      try {
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
 
   }

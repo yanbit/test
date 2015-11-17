@@ -1,6 +1,7 @@
 package com.dsk.storm.service;
 
 import backtype.storm.Config;
+import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.AuthorizationException;
@@ -27,10 +28,10 @@ public class LogProcess {
         String id = UUID.randomUUID().toString();
         SpoutConfig spoutConfig = new SpoutConfig(hosts, topic, zkRoot, id);
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
-        spoutConfig.startOffsetTime = kafka.api.OffsetRequest.LatestTime();
+        //spoutConfig.startOffsetTime = kafka.api.OffsetRequest.LatestTime();
 
         builder.setSpout("spout1", new KafkaSpout(spoutConfig), 3);
-        builder.setBolt("bolt1", new LogFilterBolt(), 10).shuffleGrouping("spout1");
+        builder.setBolt("bolt1", new LogFilterBolt(), 15).shuffleGrouping("spout1");
 
         Config config = new Config();
         Properties props = new Properties();
@@ -38,7 +39,12 @@ public class LogProcess {
         props.put("request.required.acks", "1");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         config.put(KafkaBolt.KAFKA_BROKER_PROPERTIES, props);
+        config.setMaxSpoutPending(10000);
+        config.setMessageTimeoutSecs(60);
         config.setNumWorkers(3);
+        
+        //LocalCluster cluster = new LocalCluster();
+        //cluster.submitTopology("testwhxyk", config, builder.createTopology());
         StormSubmitter.submitTopology("testwhxyk", config, builder.createTopology());
     }
 }

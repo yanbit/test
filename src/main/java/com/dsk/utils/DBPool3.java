@@ -12,7 +12,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  * @date Nov 17, 2015 1:20:13 PM
  * @todo TODO
  */
-public class DBPool {
+public class DBPool3 {
   private static DBPool3 dbPool;
   private ComboPooledDataSource dataSource;
 
@@ -20,12 +20,12 @@ public class DBPool {
     dbPool = new DBPool3();
   }
 
-  public DBPool() {
+  public DBPool3() {
     try {
       dataSource = new ComboPooledDataSource();
       // dataSource.setUser("id");
       // dataSource.setPassword("pw");
-      dataSource.setJdbcUrl("jdbc:hive2://10.1.3.56:21050/;auth=noSasl");
+      dataSource.setJdbcUrl("jdbc:hive2://10.1.3.59:21050/;auth=noSasl");
       dataSource.setDriverClass("org.apache.hive.jdbc.HiveDriver");
       dataSource.setInitialPoolSize(5);
       dataSource.setMinPoolSize(5);
